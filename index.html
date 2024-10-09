@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simple flashcards</title>
+  </head>
+  <body>
+    <div class="controls noprint">
+      <dialog id="edit-dialog" labelled-by="edit-title">
+        <div class="dialog-title">
+          <h2 id="edit-title">
+            edit card <span id="card-number"></span> on page
+            <span id="page-number"></span>
+          </h2>
+          <button id="close-edit">close</button>
+        </div>
+        <form id="edit-form" action="#" method="none" class="edit-form">
+          <div class="card edit-card">
+            <div class="card-side-title">Front</div>
+            <div class="main">
+              <label for="front">Main Text</label>
+              <input id="front" name="front" type="text" />
+            </div>
+            <div class="title">
+              <label for="title">Title</label>
+              <input id="title" name="title" type="text" />
+            </div>
+            <div class="corner">
+              <label for="corner">Corner</label>
+              <input id="corner" name="corner" type="text" />
+            </div>
+          </div>
+          <div class="card edit-card">
+            <div class="card-side-title">Back</div>
+            <div class="main">
+              <label for="back">Main Text</label>
+              <input id="back" name="back" type="text" />
+            </div>
+            <div class="corner">
+              <label for="index">Index</label>
+              <input id="index" name="index" type="text" />
+            </div>
+          </div>
+          <div class="dialog-buttons">
+            <button type="submit" data-close="true">save + close</button>
+            <button type="submit" data-close="false">save + next</button>
+          </div>
+        </form>
+      </dialog>
+      <div class="action-buttons">
+        <h1>simple flashcards</h1>
+        <button id="edit-button">edit</button>
+        <button id="print">print</button>
+      </div>
+    </div>
+    <div id="app">
+      <div class="instructions">
+        <p>click edit to start creating flashcards</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

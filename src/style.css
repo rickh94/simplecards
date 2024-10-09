@@ -1,0 +1,203 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  font-family: sans-serif;
+}
+body {
+ width: 8.5in;
+ margin: 0 auto;
+ padding: 0;
+  min-height: 100vh;
+}
+.around {
+  padding: 0.25in;
+}
+.vert-marks {
+  height: 0.25in;
+  border-right: 1pt solid black;
+  align-self: start;
+}
+.left-marks {
+  border-bottom: 1pt solid gray;
+  border-right: 1pt solid gray;
+  height: 0.25in;
+  align-self: end;
+}
+.right-marks {
+  border-bottom: 1pt solid gray;
+  border-left: 1pt solid gray;
+  height: 0.25in;
+  align-self: end;
+}
+.cards {
+  height: 10.5in;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 0.25in repeat(2, 1fr) 0.25in;
+  grid-template-rows: 0.25in repeat(5, 1fr) 0.25in;
+  gap: 0;
+}
+.back .cards {
+  direction: rtl;
+}
+.card {
+  /* border-top: 1pt dashed lightgray; */
+  /* border-left: 1pt dashed lightgray; */
+  display: flex;
+flex-direction: column;
+  align-items: center;
+  justify-content: center;
+gap: 5pt;
+padding: 0.15in;
+
+  position: relative;
+}
+.front .card {
+font-size: 16pt;
+text-align: center;
+  color: black;
+}
+.back .card,
+.back .cards {
+  border: none;
+}
+.title {
+  font-weight: bold;
+  color: gray;
+  margin-bottom: -0.25in;
+  margin-top: 0.15in;
+  font-size: 14pt;
+}
+.main {
+  font-size: 16pt;
+  direction: ltr;
+  text-wrap: pretty;
+}
+.corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 0.07in;
+  padding-right: 0.09in;
+  color: gray;
+  font-size: 10pt;
+  direction: ltr;
+  text-align: right;
+}
+.corner input {
+  text-align: right;
+}
+.back .card {
+  font-size: 12pt;
+  text-align: center;
+}
+.controls {
+  display: flex;
+  gap: 2rem;
+}
+#edit-dialog {
+  background: white;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(10vh);
+  border-radius: 1%;
+}
+.edit-card-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.card-side-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: gray;
+  font-size: 10pt;
+  font-style: italic;
+  padding: 0.125in;
+}
+.edit-form {
+  padding: 0.25in;
+}
+.edit-card {
+  border: 1px solid black;
+  width: 4.25in;
+  margin-bottom: 0.25in;
+  height: 2.1in;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.dialog-title {
+  padding: 0.125in;
+  display: flex;
+  justify-content: space-between;
+}
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+.action-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: start;
+  padding: 0.5rem;
+  gap: 0.25rem;
+}
+
+.action-buttons h1 {
+  font-size: 16pt;
+  padding-right: 1rem;
+}
+
+.instructions {
+  display: flex;
+  width: 100%;
+  margin-top: 5rem;
+  margin-left: 3rem;
+  padding: 0.5rem;
+  gap: 0.25rem;
+  font-weight: light;
+  font-size: 14pt;
+}
+button {
+  border: 1px solid black;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  padding: 0.25rem 0.5rem;
+  background: white;
+  color: black;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+button:hover {
+  background: black;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+@media print {
+ body {
+  width: 100%
+  height: 100%;
+  margin: 0;
+  padding: 0;
+ }
+  @page {
+    size: 8.5in 11in;
+    margin: 0;
+    padding: 0;
+  }
+  .cards {
+    page-break-after: always;
+  }
+  .cards:last-child {
+    page-break-after: avoid;
+  }
+  .noprint {
+    display: none !important;
+  }
+}
+
