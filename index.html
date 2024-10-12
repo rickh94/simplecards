@@ -7,6 +7,73 @@
   </head>
   <body>
     <div class="controls noprint">
+      <dialog id="load-dialog" labelled-by="load-title">
+        <div class="dialog-title">
+          <h2 id="load-title">load</h2>
+          <button id="close-load">close</button>
+        </div>
+        <div class="dialog-contents">
+          <p style="margin-bottom: 0.5rem">
+            pick a previous set of cards from below
+          </p>
+          <table style="margin-left: 0.5rem; margin-bottom: 0.5rem">
+            <thead>
+              <tr>
+                <th>name</th>
+                <th>date</th>
+                <th>load</th>
+              </tr>
+            </thead>
+            <tbody id="load-table-body"></tbody>
+          </table>
+          <div style="padding: 0.5rem">
+            <form id="load-from-file" action="#" method="none">
+              <label for="load-upload-file">or upload a json file</label>
+              <div>
+                <input
+                  type="file"
+                  name="file"
+                  id="load-upload-file"
+                  accept="application/json"
+                />
+                <button id="load-upload" type="submit">upload</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div
+          class="dialog-buttons"
+          style="padding: 0.5rem; margin-bottom: 0.25rem"
+        ></div>
+      </dialog>
+      <dialog id="save-dialog" labelled-by="save-title">
+        <div class="dialog-title">
+          <h2 id="save-title">save</h2>
+          <button id="close-save">close</button>
+        </div>
+        <div class="dialog-contents">
+          <p style="margin-bottom: 0.5rem">
+            save your cards for later. you can:
+          </p>
+          <ul style="margin-left: 0.5rem; margin-bottom: 0.5rem">
+            <li>print to a pdf</li>
+            <li>save to your internet browser</li>
+            <li>download a file</li>
+          </ul>
+          <div style="margin-top: 0.5rem">
+            <label for="save-name">name</label>
+            <input id="save-name" name="save-name" type="text" />
+          </div>
+        </div>
+        <div
+          class="dialog-buttons"
+          style="padding: 0.25rem; margin-bottom: 0.25rem"
+        >
+          <button id="save-print">print</button>
+          <button id="save-browser">save</button>
+          <button id="save-download">download</button>
+        </div>
+      </dialog>
       <dialog id="edit-dialog" labelled-by="edit-title">
         <div class="dialog-title">
           <h2 id="edit-title">
@@ -15,31 +82,46 @@
           </h2>
           <button id="close-edit">close</button>
         </div>
-        <form id="edit-form" action="#" method="none" class="edit-form">
+        <form
+          id="edit-form"
+          action="#"
+          method="none"
+          class="edit-form dialog-contents"
+        >
           <div class="card edit-card">
             <div class="card-side-title">Front</div>
             <div class="main">
-              <label for="front">Main Text</label>
-              <input id="front" name="front" type="text" />
+              <label for="front">Front Text</label>
+              <input id="front" name="front" type="text" class="main" />
             </div>
             <div class="title">
               <label for="title">Title</label>
-              <input id="title" name="title" type="text" />
+              <input id="title" name="title" type="text" class="title" />
             </div>
             <div class="corner">
               <label for="corner">Corner</label>
-              <input id="corner" name="corner" type="text" />
+              <input
+                id="corner"
+                name="corner"
+                type="text"
+                class="corner-text"
+              />
             </div>
           </div>
           <div class="card edit-card">
             <div class="card-side-title">Back</div>
-            <div class="main">
-              <label for="back">Main Text</label>
-              <input id="back" name="back" type="text" />
+            <div class="main column">
+              <label for="back">Back Text</label>
+              <textarea
+                id="back"
+                name="back"
+                type="text"
+                class="main"
+              ></textarea>
             </div>
             <div class="corner">
-              <label for="index">Index</label>
-              <input id="index" name="index" type="text" />
+              <label for="index">Order</label>
+              <input id="index" name="index" type="text" class="corner-text" />
             </div>
           </div>
           <div class="dialog-buttons">
@@ -49,9 +131,15 @@
         </form>
       </dialog>
       <div class="action-buttons">
-        <h1>simple flashcards</h1>
-        <button id="edit-button">edit</button>
-        <button id="print">print</button>
+        <div>
+          <h1>simple flashcards</h1>
+          <button id="edit-button">edit</button>
+          <button id="print">print</button>
+        </div>
+        <div>
+          <button id="save">save</button>
+          <button id="load">load</button>
+        </div>
       </div>
     </div>
     <div id="app">
