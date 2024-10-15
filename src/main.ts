@@ -7,8 +7,6 @@ import template, {
 } from "./baseTemplate";
 import Swal from "sweetalert2";
 
-// TODO: delete saved cards button
-
 let pages: Card[][] = [];
 let currentPage = 0;
 let currentCard = 0;
@@ -91,6 +89,31 @@ function loadFromStorage(uniqueid: string) {
   });
 }
 
+function deleteFromStorage(uniqueid: string) {
+  Swal.fire({
+    text: `this cannot be reversed, these saved cards will be deleted forever.`,
+    title: "confirm delete",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonText: "no, cancel",
+    cancelButtonColor: "#3085d6",
+    confirmButtonColor: "red",
+    confirmButtonText: "yes, delete",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.removeItem(uniqueid);
+      const index: SavedIndexItem[] = JSON.parse(
+        localStorage.getItem("index") ?? "[]",
+      );
+      index.splice(
+        index.findIndex((i) => i.uniqueid === uniqueid),
+        1,
+      );
+      localStorage.setItem("index", JSON.stringify(index));
+    }
+  });
+}
+
 function loadFromFile() {
   const fileInput = document.getElementById(
     "load-upload-file",
@@ -157,7 +180,7 @@ function removePage(p: number) {
     showCancelButton: true,
     cancelButtonText: "no, cancel",
     cancelButtonColor: "#3085d6",
-    confirmButtonColor: "#d33",
+    confirmButtonColor: "red",
     confirmButtonText: "yes, delete",
   }).then((result) => {
     if (result.isConfirmed) {
@@ -291,7 +314,7 @@ function render() {
         showCancelButton: true,
         cancelButtonText: "no, cancel",
         cancelButtonColor: "#3085d6",
-        confirmButtonColor: "#d33",
+        confirmButtonColor: "red",
         confirmButtonText: "yes, erase",
       }).then((result) => {
         setCard(
@@ -348,7 +371,7 @@ function render() {
           showCancelButton: true,
           cancelButtonText: "cancel",
           cancelButtonColor: "#3085d6",
-          confirmButtonColor: "#d33",
+          confirmButtonColor: "green",
           confirmButtonText: "yes",
         }).then((result) => {
           if (result.isConfirmed) {
@@ -466,12 +489,33 @@ function showLoad() {
   loadDialog.showModal();
   const loadButtons = loadDialog.querySelectorAll(".load-item-button");
   for (let button of loadButtons) {
-    if (!(button instanceof HTMLElement)) {
+    if (
+      !(button instanceof HTMLElement) ||
+      button.dataset.uniqueid === undefined ||
+      button.dataset.uniqueid === null ||
+      button.dataset.uniqueid.length === 0
+    ) {
       continue;
     }
+    const uid = button.dataset.uniqueid;
     button.addEventListener("click", () => {
-      loadFromStorage(button.dataset.uniqueid ?? "");
+      loadFromStorage(uid);
       closeLoad();
+    });
+  }
+  const deleteButtons = loadDialog.querySelectorAll(".delete-item-button");
+  for (let button of deleteButtons) {
+    if (
+      !(button instanceof HTMLElement) ||
+      button.dataset.uniqueid === undefined ||
+      button.dataset.uniqueid === null ||
+      button.dataset.uniqueid.length === 0
+    ) {
+      continue;
+    }
+    const uid = button.dataset.uniqueid;
+    button.addEventListener("click", () => {
+      deleteFromStorage(uid);
     });
   }
 }
