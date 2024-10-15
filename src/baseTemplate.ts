@@ -17,9 +17,7 @@ export function blankCard() {
     index: "",
   };
 }
-// TODO: display page numbers
 // TODO: manually add pages
-// TODO:: show front and back
 
 export function defaultCardList() {
   const cards = [];
@@ -31,6 +29,10 @@ export function defaultCardList() {
 
 Handlebars.registerHelper("date", (date: Date) => {
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+});
+
+Handlebars.registerHelper("plusOne", (n: number) => {
+  return n + 1;
 });
 
 Handlebars.registerPartial(
@@ -67,7 +69,10 @@ Handlebars.registerPartial(
 export default Handlebars.compile(`
 {{#each pages}}
   <div class="around">
-    <button class="removepage noprint" data-page-number="{{@index}}">Delete Page</button>
+    <div class="noprint page-marker">
+      <div class="page-number">Page {{plusOne @index }} Front</div>
+      <button class="removepage noprint" data-page-number="{{@index}}">Delete Page</button>
+    </div>
     <div class="cards front">
       <!-- margin -->
       <div class="left-marks"></div>
@@ -114,6 +119,10 @@ export default Handlebars.compile(`
   </div>
 
   <div class="around back">
+    <div class="noprint page-marker">
+      <div class="page-number">Page {{plusOne @index }} Back</div>
+      <button class="removepage noprint" data-page-number="{{@index}}">Delete Page</button>
+    </div>
     <div class="cards">
       <!-- margin -->
       <div></div>

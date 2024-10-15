@@ -13,6 +13,8 @@ let currentCard = 0;
 let endCard = 0;
 let endPage = 0;
 
+// FIXME: end of page not handled correctly.
+
 function showError(message: string) {
   Swal.fire({
     icon: "error",

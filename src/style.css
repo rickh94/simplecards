@@ -223,6 +223,14 @@ td {
   border: none;
   padding-left: 0;
 }
+
+.page-marker {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  align-items: center;
+}
 @media print {
  body {
   width: 100%
