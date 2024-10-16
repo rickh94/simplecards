@@ -13,8 +13,6 @@ let currentCard = 0;
 let endCard = 0;
 let endPage = 0;
 
-// FIXME: end of page not handled correctly.
-
 function showError(message: string) {
   Swal.fire({
     icon: "error",
@@ -379,7 +377,6 @@ function render() {
           if (result.isConfirmed) {
             // Not yet on the last card on the page
             if (endCard < 9) {
-              console.log("advance endCard");
               endCard++;
               pageNum = endPage;
               idx = endCard;
@@ -564,9 +561,14 @@ function handleEdit(e: SubmitEvent) {
     index: formData.get("index") as string,
   });
   currentCard++;
-  if (currentCard > 9) {
+  if (currentCard >= 9) {
     currentCard = 0;
     currentPage++;
+    if (currentPage > endPage) {
+      endPage = currentPage;
+      endCard = currentCard;
+      addPage();
+    }
   }
   target.reset();
   if (e.submitter?.dataset.close === "true") {
