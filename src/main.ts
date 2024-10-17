@@ -85,6 +85,8 @@ function loadFromStorage(uniqueid: string) {
         }
       }
     }
+    currentCard = endCard;
+    currentPage = endPage;
     render();
   });
 }
@@ -231,11 +233,9 @@ function setCard(p: number, c: number, card: Card) {
 
 function getCard(p: number, c: number) {
   if (p > pages.length - 1) {
-    showError(`page ${p} does not exist`);
     return;
   }
   if (c > pages[p].length - 1) {
-    showError(`card ${c} does not exist`);
     return;
   }
   return pages[p][c];
@@ -548,8 +548,15 @@ function closeLoad() {
 
 function handleEdit(e: SubmitEvent) {
   e.preventDefault();
-  if (currentPage > endPage || pages.length === 0) {
-    addPage();
+  if (currentCard > 9 || pages.length === 0) {
+    console.log("adding page in handle edit");
+    currentPage++;
+    currentCard = 0;
+    if (currentPage > endPage) {
+      endPage = currentPage;
+      endCard = currentCard;
+      addPage();
+    }
   }
   const target = e.target as HTMLFormElement;
   const formData = new FormData(target);
@@ -561,14 +568,8 @@ function handleEdit(e: SubmitEvent) {
     index: formData.get("index") as string,
   });
   currentCard++;
-  if (currentCard >= 9) {
-    currentCard = 0;
-    currentPage++;
-    if (currentPage > endPage) {
-      endPage = currentPage;
-      endCard = currentCard;
-      addPage();
-    }
+  if (currentCard > endCard && currentPage == endPage) {
+    endCard = currentCard;
   }
   target.reset();
   if (e.submitter?.dataset.close === "true") {
@@ -580,6 +581,13 @@ function handleEdit(e: SubmitEvent) {
 }
 
 export function setFormToCard(p: number, c: number) {
+  if (c > 9 || (c === 9 && !cardIsBlank(getCard(p, c)))) {
+    p++;
+    c = 0;
+  }
+  if (p > pages.length - 1) {
+    addPage();
+  }
   const editForm = document.getElementById("edit-form");
   if (!(editForm instanceof HTMLFormElement)) {
     showError("edit form not found");
@@ -602,7 +610,22 @@ export function setFormToCard(p: number, c: number) {
 }
 
 // dialog controls
-document.getElementById("edit-button")?.addEventListener("click", showEdit);
+document.getElementById("edit-button")?.addEventListener("click", function () {
+  if (
+    getCard(currentPage, currentCard) === undefined ||
+    cardIsBlank(pages[currentPage][currentCard])
+  ) {
+    setFormToCard(currentPage, currentCard);
+  } else {
+    currentCard++;
+    if (currentCard > 9) {
+      currentPage++;
+      currentCard = 0;
+    }
+    setFormToCard(currentPage, currentCard);
+  }
+  showEdit();
+});
 document.getElementById("close-edit")?.addEventListener("click", closeEdit);
 
 document.getElementById("save")?.addEventListener("click", function () {
