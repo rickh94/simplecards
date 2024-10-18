@@ -7,6 +7,8 @@ import template, {
 } from "./baseTemplate";
 import Swal from "sweetalert2";
 
+// FIXME: edit button behavior is incorrect after clone. might not need separate endCard and currentCard
+
 let pages: Card[][] = [];
 let currentPage = 0;
 let currentCard = 0;
@@ -37,6 +39,24 @@ type SavedIndexItem = {
   date: Date;
   uniqueid: string;
 };
+
+function reset() {
+  Swal.fire({
+    text: `reset will delete all cards. are you sure?`,
+    title: "confirm reset",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonText: "no, cancel",
+    cancelButtonColor: "#3085d6",
+    confirmButtonColor: "red",
+    confirmButtonText: "yes, reset",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      pages = [];
+      render();
+    }
+  });
+}
 
 // Saving to the browser local storage.
 // Local storage item "index" will be an array of SavedIndexItem, containing the unique id.
@@ -657,6 +677,10 @@ document.getElementById("save-browser")?.addEventListener("click", function () {
 document.getElementById("save-print")?.addEventListener("click", function () {
   closeSave();
   window.print();
+});
+
+document.getElementById("reset")?.addEventListener("click", () => {
+  reset();
 });
 
 document
