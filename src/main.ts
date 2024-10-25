@@ -447,11 +447,6 @@ function cloneCard(
   }).then((result) => {
     setCard(pageNum, idx, cardToClone);
     if (result.isConfirmed) {
-      Swal.fire({
-        title: "Cloned!",
-        text: "Card Cloned",
-        icon: "success",
-      });
       render();
     }
   });

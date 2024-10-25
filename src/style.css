@@ -5,6 +5,7 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   font-family: sans-serif;
+  text-wrap: pretty;
 }
 body {
  width: 8.5in;
