@@ -243,6 +243,7 @@ function setCard(p: number, c: number, card: Card) {
   pages[p][c].front = card.front;
   pages[p][c].back = card.back;
   pages[p][c].index = card.index;
+  pages[p][c].big = card.big;
   if (endPage <= p) {
     endPage = p;
     if (endCard < c) {
@@ -261,7 +262,10 @@ function getCard(p: number, c: number) {
   return pages[p][c];
 }
 
-function cardIsBlank(card: Card) {
+function cardIsBlank(card?: Card) {
+  if (!card) {
+    return true;
+  }
   return (
     card.front === "" &&
     card.back === "" &&
@@ -581,6 +585,7 @@ function handleEdit(e: SubmitEvent) {
     front: formData.get("front") as string,
     back: formData.get("back") as string,
     index: formData.get("index") as string,
+    big: formData.get("big") == "on" || false,
   });
   currentCard++;
   if (currentCard > endCard && currentPage == endPage) {
@@ -618,6 +623,8 @@ export function setFormToCard(p: number, c: number) {
     getCard(p, c)?.back ?? "";
   editForm.querySelector<HTMLInputElement>("#index")!.value =
     getCard(p, c)?.index ?? "";
+  editForm.querySelector<HTMLInputElement>("#big")!.checked =
+    getCard(p, c)?.big ?? false;
   currentPage = p;
   currentCard = c;
   document.getElementById("page-number")!.innerText = `${currentPage + 1}`;
