@@ -704,6 +704,7 @@ document.getElementById("testrender")?.addEventListener("click", function () {
       front: `Front ${i}`,
       back: `Back ${i}`,
       index: `Index ${i}`,
+      big: false,
     });
   }
   render();
