@@ -6,6 +6,7 @@ import template, {
   loadTableTemplate,
 } from "./baseTemplate";
 import Swal from "sweetalert2";
+import QRCode from "qrcode";
 
 // FIXME: edit button behavior is incorrect after clone. might not need separate endCard and currentCard
 
@@ -244,6 +245,7 @@ function setCard(p: number, c: number, card: Card) {
   pages[p][c].back = card.back;
   pages[p][c].index = card.index;
   pages[p][c].big = card.big;
+  pages[p][c].qrcode = card.qrcode;
   if (endPage <= p) {
     endPage = p;
     if (endCard < c) {
@@ -471,6 +473,7 @@ function showSave() {
   }
 }
 
+// FIXME: after creation, you cannot edit card 10 on page 1
 function showEdit() {
   const edit = document.getElementById("edit-dialog");
   if (!(edit instanceof HTMLDialogElement)) {
@@ -565,7 +568,7 @@ function closeLoad() {
   loadDialog.close();
 }
 
-function handleEdit(e: SubmitEvent) {
+async function handleEdit(e: SubmitEvent) {
   e.preventDefault();
   if (currentCard > 9 || pages.length === 0) {
     console.log("adding page in handle edit");
@@ -579,6 +582,19 @@ function handleEdit(e: SubmitEvent) {
   }
   const target = e.target as HTMLFormElement;
   const formData = new FormData(target);
+  let qrcode = undefined;
+  if (formData.get("qrcode") == "on") {
+    try {
+      qrcode = await QRCode.toDataURL(formData.get("back") as string, {
+        errorCorrectionLevel: "M",
+        margin: 0,
+        scale: 4,
+      });
+    } catch (e) {
+      showError("Could not create QR Code");
+      qrcode = undefined;
+    }
+  }
   setCard(currentPage, currentCard, {
     title: formData.get("title") as string,
     corner: formData.get("corner") as string,
@@ -586,6 +602,7 @@ function handleEdit(e: SubmitEvent) {
     back: formData.get("back") as string,
     index: formData.get("index") as string,
     big: formData.get("big") == "on" || false,
+    qrcode,
   });
   currentCard++;
   if (currentCard > endCard && currentPage == endPage) {
@@ -601,7 +618,7 @@ function handleEdit(e: SubmitEvent) {
 }
 
 export function setFormToCard(p: number, c: number) {
-  if (c > 9 || (c === 9 && !cardIsBlank(getCard(p, c)))) {
+  if (c > 9) {
     p++;
     c = 0;
   }
@@ -625,6 +642,8 @@ export function setFormToCard(p: number, c: number) {
     getCard(p, c)?.index ?? "";
   editForm.querySelector<HTMLInputElement>("#big")!.checked =
     getCard(p, c)?.big ?? false;
+  editForm.querySelector<HTMLInputElement>("#qrcode")!.checked = !!getCard(p, c)
+    ?.qrcode;
   currentPage = p;
   currentCard = c;
   document.getElementById("page-number")!.innerText = `${currentPage + 1}`;
@@ -671,6 +690,11 @@ document
     closeSave();
   });
 
+document.getElementById("add-page")?.addEventListener("click", function () {
+  addPage();
+  render();
+});
+
 document.getElementById("save-browser")?.addEventListener("click", function () {
   saveToBrowser();
   closeSave();
@@ -691,24 +715,6 @@ document
     event.preventDefault();
     loadFromFile();
   });
-
-// debug code
-document.getElementById("testrender")?.addEventListener("click", function () {
-  if (pages.length < 1) {
-    addPage();
-  }
-  for (let i = 0; i < 5; i++) {
-    setCard(0, i, {
-      title: `Title ${i}`,
-      corner: `Corner ${i}`,
-      front: `Front ${i}`,
-      back: `Back ${i}`,
-      index: `Index ${i}`,
-      big: false,
-    });
-  }
-  render();
-});
 
 document
   .getElementById("set-form-test")

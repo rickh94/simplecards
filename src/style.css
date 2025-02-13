@@ -7,6 +7,18 @@
   font-family: sans-serif;
   text-wrap: pretty;
 }
+
+img {
+  image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+  image-rendering: -moz-crisp-edges;          /* Firefox                        */
+  image-rendering: -o-crisp-edges;            /* Opera                          */
+  image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+  /* image-rendering: crisp-edges; */
+  image-rendering: pixelated;                 /* Universal support since 2021   */
+  image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+
+}
 body {
  width: 8.5in;
  margin: 0 auto;
@@ -16,6 +28,10 @@ body {
 }
 .around {
   padding: 0.25in;
+}
+
+.back {
+  border-bottom: 2px dashed black;
 }
 .vert-marks {
   height: 0.25in;
@@ -235,6 +251,9 @@ td {
   padding-bottom: 0.5rem;
   align-items: center;
 }
+#add-page {
+  margin: 2rem 0 1rem 5rem;
+}
 @media print {
  body {
   width: 100%
@@ -257,5 +276,9 @@ td {
   .noprint {
     display: none !important;
   }
+  .back {
+    border-bottom: none !important;
+  }
 }
+
 
